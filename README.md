@@ -45,25 +45,33 @@ module.exports = {
   TWITTER_AUTH_TOKEN: "e68c75f89217cdfd2f58f0f40301d060c0183b94",
   TWITTER_CT0: "41e023eaeee4ac8d6545c0815cf7c20292984ed640b5543ff3edc8ffe95203f97d...",
 
-  // Cuentas a monitorear (puedes agregar las que quieras sin riesgo de bloqueo)
-  TRACKED_USERS: ["yeisonvelez11", "tier10k", "binance"],
+  // Intervalo de sondeo en segundos (18s = 50 req/15min, 100% sostenible 24/7 sin bloqueos)
+  POLL_INTERVAL_SECONDS: 18,
 
-  // Cadencia continua por paso (Recomendado: 2.5s)
-  POLL_INTERVAL_SECONDS: 2.5,
-
-  // Palabras clave requeridas (al menos UNA debe coincidir, insensible a mayúsculas/minúsculas).
-  // Si dejas el arreglo vacío [], pasarán todos los tweets que no estén en la lista de exclusión.
-  INCLUDE_KEYWORDS: [],
-
-  // Palabras clave prohibidas (si el tweet contiene CUALQUIERA de estas palabras, NO se enviará a Telegram).
-  EXCLUDE_KEYWORDS: []
+  // Cuentas a monitorear y sus filtros individuales:
+  TRACKED_USERS: {
+    "yeisonvelez11": {
+      include_keywords: ["adding"],
+      exclude_keywords: ["not"]
+    },
+    "binance": {
+      include_keywords: ["listing", "launchpool"],
+      exclude_keywords: ["maintenance", "system"]
+    },
+    // Cuenta donde quieres recibir TODO sin ningún filtro:
+    "elonmusk": {
+      include_keywords: [], // Vacío = deja pasar todos sus tweets
+      exclude_keywords: []
+    }
+  }
 };
 ```
 
-> **Reglas de Filtrado:**
-> 1. **Exclusión prioritaria:** Si el tweet contiene alguna palabra de `EXCLUDE_KEYWORDS` (sin importar mayúsculas o minúsculas), **se descarta automáticamente**.
-> 2. **Inclusión:** Si `INCLUDE_KEYWORDS` tiene elementos, el tweet debe contener al menos una de esas palabras para ser enviado. Si está vacío (`[]`), se admiten todos.
-> 3. **Imágenes en Telegram:** Si el tweet contiene fotos/imágenes, la alerta se enviará con la foto adjunta, el texto completo formateado y el botón/enlace directo hacia el tweet original en X.com.
+> **Reglas de Filtrado por Usuario:**
+> 1. **Filtros individuales:** Cada cuenta tiene sus propias listas de palabras requeridas (`include_keywords`) y prohibidas (`exclude_keywords`).
+> 2. **Sin filtros (`[]`):** Si ambos arrays están vacíos (`[]`), se envían **todos** los tweets de esa cuenta directamente a Telegram.
+> 3. **Exclusión prioritaria:** Si el tweet contiene alguna palabra de `exclude_keywords`, **se descarta automáticamente**.
+> 4. **Imágenes en Telegram:** Si el tweet contiene fotos/imágenes, la alerta se enviará con la foto adjunta, el texto completo y el enlace directo al tweet.
 
 ---
 
