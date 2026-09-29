@@ -1,0 +1,15 @@
+{
+  "name": "crypto-twitter-monitor",
+  "version": "1.0.0",
+  "description": "Monitor de tweets en tiempo real para criptomonedas con alertas a Telegram y endpoint de health check",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["twitter", "telegram", "crypto", "signals", "alerts"],
+  "author": "Yeison Velez",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
