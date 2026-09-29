@@ -75,6 +75,7 @@ async function warmup() {
     `${config.TRACKED_USERS.map(u => "• @" + u).join("\n")}\n\n` +
     `⚡ <b>Modo:</b> Round-Robin Cadenciado (Anti-Ban)\n` +
     `⏱ <b>Cadencia:</b> 1 petición cada ${config.POLL_INTERVAL_SECONDS}s\n` +
+    `🕒 <b>Hora inicio (COL):</b> ${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota", hour12: true })}\n` +
     `🟢 <b>Health Check:</b> <code>/health</code>`
   );
 }

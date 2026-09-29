@@ -38,6 +38,27 @@ async function sendTelegramAlert(htmlMessage) {
 }
 
 /**
+ * Formatea una fecha en la zona horaria de Colombia (America/Bogota - UTC-5)
+ */
+function formatColombiaTime(dateInput) {
+  try {
+    const d = dateInput ? new Date(dateInput) : new Date();
+    return d.toLocaleString("es-CO", {
+      timeZone: "America/Bogota",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour12: true
+    });
+  } catch (e) {
+    return String(dateInput || "");
+  }
+}
+
+/**
  * Formatea un tweet y lo envía como alerta (con imagen si está disponible)
  * @param {object} tweet
  */
@@ -54,11 +75,15 @@ async function notifyNewTweet(tweet) {
     tweetText = tweetText.substring(0, 700) + "... (continúa en X)";
   }
 
+  const publishedAt = formatColombiaTime(tweet.created_at);
+  const receivedAt = formatColombiaTime(new Date());
+
   const message = [
     `🚨 <b>NUEVA ALERTA DE TWITTER</b> 🚨`,
     ``,
     `👤 <b>Cuenta:</b> @${escapeHtml(tweet.screen_name)}`,
-    `⏰ <b>Hora:</b> ${new Date().toLocaleTimeString()} (UTC ${new Date().toISOString().substring(11, 19)})`,
+    `🐦 <b>Publicado (COL):</b> ${publishedAt}`,
+    `⚡ <b>Recibido (COL):</b> ${receivedAt}`,
     ``,
     `📝 <b>Contenido:</b>`,
     `${escapeHtml(tweetText)}`,
